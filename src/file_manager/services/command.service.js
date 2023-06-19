@@ -12,7 +12,11 @@ export class CommandService{
         (command in this.commands) ? command : console.log(`I don't know that command`)
     }
 
-    async executeCommand(command) {
+    async executeCommand(userInput) {
+        const inputArray = userInput.split(" ");
+        const command = inputArray[0];
+        const parameter = inputArray[1];
+
         await this.check(command);
 
         switch(command) {
@@ -21,6 +25,9 @@ export class CommandService{
                 break;
             case "up":
                 pathService.goUp();
+                break;
+            case "cd": 
+                pathService.changeDirectory(parameter);
                 break;
             default: 
                 console.log(`Unknown command`);

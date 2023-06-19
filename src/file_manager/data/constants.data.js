@@ -1,4 +1,5 @@
 export const commands = {
     ".exit": "exit",
-    "up": "up"
+    "up": "up",
+    "cd": "cd",
 }
