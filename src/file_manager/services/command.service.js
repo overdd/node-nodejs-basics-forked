@@ -29,6 +29,9 @@ export class CommandService{
             case "cd": 
                 pathService.changeDirectory(parameter);
                 break;
+            case "ls":
+                pathService.listDirectory();
+                break;
             default: 
                 console.log(`Unknown command`);
         }
