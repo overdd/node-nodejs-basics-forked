@@ -45,6 +45,8 @@ async listDirectory() {
     const data = [["(index)", "Name", "Type"]];
     const maxColumnsLengths = [data[0][0].length, data[0][1].length, data[0][2].length];
 
+    await this.sortFilesAndDirectories(filesAndDirectories);
+
     filesAndDirectories.forEach((file, index) => {
       const filePath = path.join(process.env.FILEMANAGERPATH, file);
       const fileStat = fs.statSync(filePath);
@@ -78,13 +80,12 @@ async listDirectory() {
     });
   
     output += `└${horizontalBoarderLine}┘`;
-  
     console.log(output);
   }
   
 
       
-    validatePath = async (path) => {
+    async validatePath(path) {
         const promisifiedAccess = promisify(fs.access);
         try {
             await promisifiedAccess(path, fs.constants.F_OK);
@@ -100,6 +101,26 @@ async listDirectory() {
         } else {
             return false;
         }
+    }
+
+    async sortFilesAndDirectories(filesAndDirectories) {
+        await filesAndDirectories.sort((a, b) => {
+            let pathA = path.join(process.env.FILEMANAGERPATH, a);
+            let pathB = path.join(process.env.FILEMANAGERPATH, b);
+          
+            let isADirectory = fs.statSync(pathA).isDirectory();
+            let isBDirectory = fs.statSync(pathB).isDirectory();
+          
+            if (isADirectory && !isBDirectory) {
+              return -1;
+            }
+          
+            if (!isADirectory && isBDirectory) {
+              return 1;
+            }
+          
+            return a.localeCompare(b);
+          });
     }
 }
 
