@@ -7,7 +7,7 @@ export class PathService{
         process.env.FILEMANAGERPATH = process.env.HOME;
     }
 
-    printCurrentPath() {
+    async printCurrentPath() {
         console.log(`You are currently in ${process.env.FILEMANAGERPATH}`);
     } 
 
@@ -105,11 +105,11 @@ async listDirectory() {
 
     async sortFilesAndDirectories(filesAndDirectories) {
         await filesAndDirectories.sort((a, b) => {
-            let pathA = path.join(process.env.FILEMANAGERPATH, a);
-            let pathB = path.join(process.env.FILEMANAGERPATH, b);
+            const pathA = path.join(process.env.FILEMANAGERPATH, a);
+            const pathB = path.join(process.env.FILEMANAGERPATH, b);
           
-            let isADirectory = fs.statSync(pathA).isDirectory();
-            let isBDirectory = fs.statSync(pathB).isDirectory();
+            const isADirectory = fs.statSync(pathA).isDirectory();
+            const isBDirectory = fs.statSync(pathB).isDirectory();
           
             if (isADirectory && !isBDirectory) {
               return -1;

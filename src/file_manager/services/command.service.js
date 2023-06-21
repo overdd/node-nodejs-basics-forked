@@ -1,8 +1,10 @@
 import { commands } from "../data/constants.data.js";
 import { PathService } from "./path.service.js";
 import { ExitService } from "./exit.service.js";
+import { FilesService } from "./files.service.js";
 
 const pathService = new PathService();
+const filesService = new FilesService();
 
 export class CommandService{
     constructor() {
@@ -31,6 +33,9 @@ export class CommandService{
                 break;
             case "ls":
                 pathService.listDirectory();
+                break;
+            case "cat":
+                filesService.concatenate(parameter);
                 break;
             default: 
                 console.log(`Unknown command`);
