@@ -19,7 +19,7 @@ export class PathService{
             this.validatePath(updatedPath);
             process.env.FILEMANAGERPATH = updatedPath;
         } catch(error) {
-            console.log(`File Manager wasn"t able to go UP: ${error}`);
+            console.log(`File Manager wasn't able to go UP: ${error}`);
         }
     }
 

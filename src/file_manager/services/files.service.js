@@ -24,4 +24,20 @@ export class FilesService{
             console.log(`File Manager wasn't able to read file ${pathToRead}`);
         }
     }
+
+    async add(pathToFile) {
+        let pathToWrite;
+        let data="";
+        try { 
+            pathToWrite = path.join(process.env.FILEMANAGERPATH, pathToFile);
+       
+            fs.writeFile(pathToWrite, data, (error) => {
+                if (error) {
+                    throw new Error(error);
+                }
+            });
+        } catch(error) {
+            console.log(`File Manager wasn't able to create a new file ${pathToWrite}`);
+        }
+    }
 }

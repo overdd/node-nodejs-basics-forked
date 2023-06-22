@@ -4,4 +4,5 @@ export const commands = {
     "cd": "cd",
     "ls": "ls",
     "cat": "cat",
+    "add": "add"
 }

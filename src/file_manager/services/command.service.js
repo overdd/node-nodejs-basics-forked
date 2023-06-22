@@ -37,6 +37,9 @@ export class CommandService{
             case "cat":
                 filesService.concatenate(parameter);
                 break;
+            case "add": 
+                filesService.add(parameter);
+                break;
             default: 
                 console.log(`Unknown command`);
         }
