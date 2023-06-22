@@ -68,9 +68,24 @@ export class FilesService{
             const readStream = fs.createReadStream(pathToCopy);
             const writeStream = fs.createWriteStream(pathToWrite);
 
-            readStream.pipe(writeStream);        
+            readStream.pipe(writeStream);
         } catch(error) {
             console.log(`File Manager wasn't able to copy file ${file} info ${destination}`);
+        }
+    }
+
+     async move(file, destination) {
+        try { 
+            await this.copy(file, destination);
+            const pathToRemove = path.join(process.env.FILEMANAGERPATH, file);
+            
+            fs.unlink(pathToRemove, (error) => {
+                if (error) {
+                    throw new Error (error);
+                };
+            })
+        } catch(error) {
+            console.log(`File Manager wasn't able to move file ${file} info ${destination}`);
         }
     }
     

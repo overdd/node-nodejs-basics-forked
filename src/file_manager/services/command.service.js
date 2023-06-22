@@ -47,6 +47,9 @@ export class CommandService{
             case "cp":
                 filesService.copy(firstParameter, secondParameter);
                 break;
+            case "mv":
+                filesService.move(firstParameter, secondParameter);
+                break;
             default: 
                 console.log(`Unknown command`);
         }
