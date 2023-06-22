@@ -40,4 +40,23 @@ export class FilesService{
             console.log(`File Manager wasn't able to create a new file ${pathToWrite}`);
         }
     }
+
+    async rename(oldName, newName) {
+        const pathBeforeRename = path.join(process.env.FILEMANAGERPATH, oldName);
+        const pathAfterRename = path.join(process.env.FILEMANAGERPATH, newName);
+
+        try { 
+            this.pathService.validatePath(pathBeforeRename);
+
+            fs.rename(pathBeforeRename, pathAfterRename, (error) => {
+                if (error) {
+                    throw new Error(error);
+                }
+            });
+        } catch(error) {
+            console.log(`File Manager wasn't able to rename file ${pathBeforeRename} info ${pathAfterRename}`);
+        }
+    }
+
+    
 }

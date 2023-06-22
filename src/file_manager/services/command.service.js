@@ -17,7 +17,8 @@ export class CommandService{
     async executeCommand(userInput) {
         const inputArray = userInput.split(" ");
         const command = inputArray[0];
-        const parameter = inputArray[1];
+        const firstParameter = inputArray[1];
+        const secondParameter = inputArray[2];
 
         await this.check(command);
 
@@ -29,16 +30,19 @@ export class CommandService{
                 pathService.goUp();
                 break;
             case "cd": 
-                pathService.changeDirectory(parameter);
+                pathService.changeDirectory(firstParameter);
                 break;
             case "ls":
                 pathService.listDirectory();
                 break;
             case "cat":
-                filesService.concatenate(parameter);
+                filesService.concatenate(firstParameter);
                 break;
             case "add": 
-                filesService.add(parameter);
+                filesService.add(firstParameter);
+                break;
+            case "rn":
+                filesService.rename(firstParameter, secondParameter);
                 break;
             default: 
                 console.log(`Unknown command`);
