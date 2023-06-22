@@ -1,11 +1,12 @@
-export const commands = {
-    ".exit": "exit",
-    "up": "up",
-    "cd": "cd",
-    "ls": "ls",
-    "cat": "cat",
-    "add": "add",
-    "rn": "rn",
-    "cp": "cp",
-    "mv": "mv",
-}
+export const commands = [
+    ".exit",
+    "up",
+    "cd",
+    "ls",
+    "cat",
+    "add",
+    "rn",
+    "cp",
+    "mv",
+    "rm"
+]

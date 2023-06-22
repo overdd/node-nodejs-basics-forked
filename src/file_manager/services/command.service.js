@@ -11,7 +11,7 @@ export class CommandService{
         this.commands = commands;
     }
     async check(command) {
-        (command in this.commands) ? command : console.log(`I don't know that command`)
+        (this.commands.includes(command)) ? command : console.log(`I don't know that command`);
     }
 
     async executeCommand(userInput) {
