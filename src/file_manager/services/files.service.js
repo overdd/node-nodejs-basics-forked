@@ -74,7 +74,7 @@ export class FilesService{
         }
     }
 
-     async move(file, destination) {
+    async move(file, destination) {
         try { 
             await this.copy(file, destination);
             const pathToRemove = path.join(process.env.FILEMANAGERPATH, file);
@@ -86,6 +86,20 @@ export class FilesService{
             })
         } catch(error) {
             console.log(`File Manager wasn't able to move file ${file} info ${destination}`);
+        }
+    }
+
+    async remove(file) {
+        try { 
+            const pathToRemove = path.join(process.env.FILEMANAGERPATH, file);
+            
+            fs.unlink(pathToRemove, (error) => {
+                if (error) {
+                    throw new Error (error);
+                };
+            })
+        } catch(error) {
+            console.log(`File Manager wasn't able to remove file ${file} `);
         }
     }
     

@@ -50,6 +50,9 @@ export class CommandService{
             case "mv":
                 filesService.move(firstParameter, secondParameter);
                 break;
+            case "rm":
+                filesService.remove(firstParameter);
+                break;
             default: 
                 console.log(`Unknown command`);
         }
