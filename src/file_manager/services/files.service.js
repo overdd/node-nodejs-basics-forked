@@ -58,5 +58,20 @@ export class FilesService{
         }
     }
 
+    async copy(file, destination) {
+        try { 
+            const pathToCopy = path.join(process.env.FILEMANAGERPATH, file);
+            const pathToWrite = path.join(process.env.FILEMANAGERPATH, destination, file);
+    
+            this.pathService.validatePath(pathToCopy);
+        
+            const readStream = fs.createReadStream(pathToCopy);
+            const writeStream = fs.createWriteStream(pathToWrite);
+
+            readStream.pipe(writeStream);        
+        } catch(error) {
+            console.log(`File Manager wasn't able to copy file ${file} info ${destination}`);
+        }
+    }
     
 }

@@ -6,4 +6,5 @@ export const commands = {
     "cat": "cat",
     "add": "add",
     "rn": "rn",
+    "cp": "cp",
 }

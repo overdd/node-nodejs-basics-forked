@@ -44,6 +44,9 @@ export class CommandService{
             case "rn":
                 filesService.rename(firstParameter, secondParameter);
                 break;
+            case "cp":
+                filesService.copy(firstParameter, secondParameter);
+                break;
             default: 
                 console.log(`Unknown command`);
         }
