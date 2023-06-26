@@ -122,5 +122,10 @@ async listDirectory() {
             return a.localeCompare(b);
           });
     }
+
+    async checkFileExtension(file, extension) {
+        const ext = path.extname(file);
+        return ext === extension;
+    }
 }
 

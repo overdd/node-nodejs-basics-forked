@@ -4,11 +4,13 @@ import { ExitService } from "./exit.service.js";
 import { FilesService } from "./files.service.js";
 import { OsService } from "./os.service.js";
 import { HashService } from "./hash.service.js";
+import { ZipService } from "./zip.service.js";
 
 const pathService = new PathService();
 const filesService = new FilesService();
 const osService = new OsService();
 const hashService = new HashService();
+const zipService = new ZipService();
 
 export class CommandService{
     constructor() {
@@ -62,6 +64,12 @@ export class CommandService{
                 break;
             case "hash":
                 hashService.calculateHash(firstParameter);
+                break;
+            case "compress":
+                await zipService.compress(firstParameter);
+                break;
+            case "decompress":
+                await zipService.decompress(firstParameter);
                 break;
             default: 
                 console.log(`Unknown command`);
