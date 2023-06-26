@@ -3,10 +3,12 @@ import { PathService } from "./path.service.js";
 import { ExitService } from "./exit.service.js";
 import { FilesService } from "./files.service.js";
 import { OsService } from "./os.service.js";
+import { HashService } from "./hash.service.js";
 
 const pathService = new PathService();
 const filesService = new FilesService();
 const osService = new OsService();
+const hashService = new HashService();
 
 export class CommandService{
     constructor() {
@@ -57,6 +59,9 @@ export class CommandService{
                 break;
             case "os":
                 osService.osHandler(firstParameter);
+                break;
+            case "hash":
+                hashService.calculateHash(firstParameter);
                 break;
             default: 
                 console.log(`Unknown command`);

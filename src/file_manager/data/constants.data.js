@@ -9,5 +9,6 @@ export const commands = [
     "cp",
     "mv",
     "rm",
-    "os"
+    "os",
+    "hash"
 ]
