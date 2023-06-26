@@ -2,16 +2,18 @@ import { commands } from "../data/constants.data.js";
 import { PathService } from "./path.service.js";
 import { ExitService } from "./exit.service.js";
 import { FilesService } from "./files.service.js";
+import { OsService } from "./os.service.js";
 
 const pathService = new PathService();
 const filesService = new FilesService();
+const osService = new OsService();
 
 export class CommandService{
     constructor() {
         this.commands = commands;
     }
     async check(command) {
-        (this.commands.includes(command)) ? command : console.log(`I don't know that command`);
+        (this.commands.includes(command)) ? command : console.log(`This command not in the list of allowed commands`);
     }
 
     async executeCommand(userInput) {
@@ -52,6 +54,9 @@ export class CommandService{
                 break;
             case "rm":
                 filesService.remove(firstParameter);
+                break;
+            case "os":
+                osService.osHandler(firstParameter);
                 break;
             default: 
                 console.log(`Unknown command`);

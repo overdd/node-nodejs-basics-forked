@@ -8,5 +8,6 @@ export const commands = [
     "rn",
     "cp",
     "mv",
-    "rm"
+    "rm",
+    "os"
 ]
