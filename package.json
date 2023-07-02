@@ -2,7 +2,6 @@
   "name": "node-nodejs-basics",
   "version": "1.0.0",
   "description": "This repository is the part of nodejs-assignments https://github.com/AlreadyBored/nodejs-assignments",
-  "type": "module",
   "scripts": {
     "cli:args": "node src/cli/args.js --some-arg value1 --other 1337 --arg2 42",
     "cli:env": "npx cross-env SOME=any RSS_foo=bar RSS_bar=baz node src/cli/env.js",
@@ -21,7 +20,12 @@
     "wt": "node src/wt/main.js",
     "zip:compress": "node src/zip/compress.js",
     "zip:decompress": "node src/zip/decompress.js",
-    "start": "node src/file_manager/index"
+    "start": "node src/file_manager/index",
+    "start:prod": "tsc && node dist/launcher.js",
+    "start:dev": "nodemon --watch 'src/**/*.ts' --exec ts-node src/server/launcher.ts",
+    "start:multi:prod": "tsc && node dist/launcher-multi.js",
+    "start:multi:dev": "nodemon --watch 'src/**/*.ts' --exec ts-node src/server/launcher-multi.ts",
+    "test": "mocha -r ts-node/register 'src/server/test/**/*.test.ts'"
   },
   "repository": {
     "type": "git",
@@ -37,5 +41,25 @@
   "bugs": {
     "url": "https://github.com/AlreadyBored/node-nodejs-basics/issues"
   },
-  "homepage": "https://github.com/AlreadyBored/node-nodejs-basics#readme"
+  "homepage": "https://github.com/AlreadyBored/node-nodejs-basics#readme",
+  "dependencies": {
+    "dotenv": "^16.3.1",
+    "nodemon": "^2.0.22",
+    "ts-node": "^10.9.1",
+    "uuid": "^9.0.0"
+  },
+  "devDependencies": {
+    "@types/chai": "^4.3.5",
+    "@types/chai-http": "^4.2.0",
+    "@types/mocha": "^10.0.1",
+    "@types/node": "^20.3.1",
+    "@types/uuid": "^9.0.2",
+    "@typescript-eslint/eslint-plugin": "^5.60.1",
+    "@typescript-eslint/parser": "^5.60.1",
+    "chai": "^4.3.7",
+    "chai-http": "^4.4.0",
+    "eslint": "^8.43.0",
+    "mocha": "^10.2.0",
+    "typescript": "^5.1.3"
+  }
 }
