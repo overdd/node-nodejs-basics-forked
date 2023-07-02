@@ -2,7 +2,7 @@ import chai from 'chai';
 import chaiHttp from 'chai-http';
 import { v4 as uuidv4 } from 'uuid';
 import { Server } from './../server';
-
+import { CONSTANTS } from './../data/constants';
 
 chai.use(chaiHttp);
 const { expect, request } = chai;
@@ -68,6 +68,7 @@ describe('Server unit tests', () => {
           .get('/api/users/wrond-id')
           .end((err, res) => {
             expect(res).to.have.status(400);
+            expect(res.body.message).to.equal(CONSTANTS.messages.invalidUid);
             done();
           });
       });
@@ -78,6 +79,7 @@ describe('Server unit tests', () => {
           .get(`/api/users/${uuidNeverExisted}`)
           .end((err, res) => {
             expect(res).to.have.status(404);
+            expect(res.body.message).to.equal(CONSTANTS.messages.userNotFound);
             done();
           });
       });
@@ -108,6 +110,7 @@ describe('Server unit tests', () => {
           })
           .end((err, res) => {
             expect(res).to.have.status(400);
+            expect(res.body.message).to.equal(`${CONSTANTS.messages.missingFieldsInRequest}username`);
             done();
           });
       });
@@ -120,6 +123,7 @@ describe('Server unit tests', () => {
           })
           .end((err, res) => {
             expect(res).to.have.status(400);
+            expect(res.body.message).to.equal(`${CONSTANTS.messages.missingFieldsInRequest}age`);
             done();
           });
       });
@@ -132,6 +136,18 @@ describe('Server unit tests', () => {
           })
           .end((err, res) => {
             expect(res).to.have.status(400);
+            expect(res.body.message).to.equal(`${CONSTANTS.messages.missingFieldsInRequest}hobbies`);
+            done();
+          });
+      });
+      it('should return 400 if all field are missing', done => {
+        request(`http://localhost:${port}`)
+          .post('/api/users')
+          .send({
+          })
+          .end((err, res) => {
+            expect(res).to.have.status(400);
+            expect(res.body.message).to.equal(`${CONSTANTS.messages.missingFieldsInRequest}username,age,hobbies`);
             done();
           });
       });
@@ -170,6 +186,7 @@ describe('Server unit tests', () => {
           })
           .end((err, res) => {
             expect(res).to.have.status(400);
+            expect(res.body.message).to.equal(CONSTANTS.messages.invalidUid);
             done();
           });
       });
@@ -185,6 +202,7 @@ describe('Server unit tests', () => {
           })
           .end((err, res) => {
             expect(res).to.have.status(404);
+            expect(res.body.message).to.equal(CONSTANTS.messages.userNotFound);
             done();
           });
       });
@@ -206,6 +224,7 @@ describe('Server unit tests', () => {
           .delete('/api/users/wrond-id')
           .end((err, res) => {
             expect(res).to.have.status(400);
+            expect(res.body.message).to.equal(CONSTANTS.messages.invalidUid);
             done();
           });
       });
@@ -216,6 +235,7 @@ describe('Server unit tests', () => {
           .delete(`/api/users/${uuidNeverExisted}`)
           .end((err, res) => {
             expect(res).to.have.status(404);
+            expect(res.body.message).to.equal(CONSTANTS.messages.userNotFound);
             done();
           });
       });
@@ -228,7 +248,7 @@ describe('Server unit tests', () => {
             .end((err, res) => {
               expect(err).to.be.null;
               expect(res).to.have.status(404);
-              expect(res.body).to.deep.equal({ message: `Hey, this page wasn't found. Please try again.` });
+              expect(res.body).to.deep.equal({ message: CONSTANTS.messages.pageNotFound });
               done();
             });
         });

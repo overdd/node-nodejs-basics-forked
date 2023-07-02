@@ -3,6 +3,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { validate as uuidValidate } from 'uuid';
 import * as url from 'url';
 import { User } from './interface/user.interface';
+import { CONSTANTS } from './data/constants';
 
 export class Server {
   private server;
@@ -35,10 +36,10 @@ export class Server {
           if (userId) {
             if (!uuidValidate(userId)) {
               res.writeHead(400, { 'Content-Type': 'application/json' });
-              res.end(JSON.stringify({ message: 'Invalid UUID' }));
+              res.end(JSON.stringify({ message: CONSTANTS.messages.invalidUid }));
             } else if (!this.users[userId]) {
               res.writeHead(404, { 'Content-Type': 'application/json' });
-              res.end(JSON.stringify({ message: 'User not found' }));
+              res.end(JSON.stringify({ message: CONSTANTS.messages.userNotFound }));
             } else {
               res.writeHead(200, { 'Content-Type': 'application/json' });
               res.end(JSON.stringify(this.users[userId]));
@@ -61,7 +62,7 @@ export class Server {
               !age ? missingFields.push('age') : age;
               !hobbies ? missingFields.push('hobbies') : hobbies;
               res.writeHead(400, { 'Content-Type': 'application/json' });
-              res.end(JSON.stringify({ message: `Request body is missing required fields: ${missingFields}` }));
+              res.end(JSON.stringify({ message: `${CONSTANTS.messages.missingFieldsInRequest}${missingFields}` }));
               return;
           }        
             const id = uuidv4();
@@ -75,13 +76,13 @@ export class Server {
         case 'PUT':
           if (!userId || !uuidValidate(userId)) {
             res.writeHead(400, { 'Content-Type': 'application/json' });
-            res.end(JSON.stringify({ message: 'Invalid UUID' }));
+            res.end(JSON.stringify({ message: CONSTANTS.messages.invalidUid }));
             break;
           }
   
           if (!this.users[userId]) {
             res.writeHead(404, { 'Content-Type': 'application/json' });
-            res.end(JSON.stringify({ message: 'User not found' }));
+            res.end(JSON.stringify({ message: CONSTANTS.messages.userNotFound }));
             break;
           }
   
@@ -101,13 +102,13 @@ export class Server {
         case 'DELETE':
           if (!userId || !uuidValidate(userId)) {
             res.writeHead(400, { 'Content-Type': 'application/json' });
-            res.end(JSON.stringify({ message: 'Invalid UUID' }));
+            res.end(JSON.stringify({ message: CONSTANTS.messages.invalidUid }));
             break;
           }
   
           if (!this.users[userId]) {
             res.writeHead(404, { 'Content-Type': 'application/json' });
-            res.end(JSON.stringify({ message: 'User not found' }));
+            res.end(JSON.stringify({ message: CONSTANTS.messages.userNotFound }));
             break;
           }
   
@@ -118,7 +119,7 @@ export class Server {
       }
     } else {
       res.writeHead(404, { 'Content-Type': 'application/json' });
-      res.end(JSON.stringify({ message: `Hey, this page wasn't found. Please try again.` }));
+      res.end(JSON.stringify({ message: CONSTANTS.messages.pageNotFound }));
     }
   }
 
