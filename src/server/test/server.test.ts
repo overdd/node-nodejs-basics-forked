@@ -1,11 +1,12 @@
 import chai from 'chai';
 import chaiHttp from 'chai-http';
-import { Server } from './../server'; // Make sure to export your server in your server.ts file
+import { v4 as uuidv4 } from 'uuid';
+import { Server } from './../server';
 
 
 chai.use(chaiHttp);
 const { expect, request } = chai;
-
+const port = 3001;
 
 
 describe('Server unit tests', () => {
@@ -13,10 +14,10 @@ describe('Server unit tests', () => {
     let userId: string;
 
     before("Generate test data", async () => {
-        server = new Server(3000);
+        server = new Server(port);
         await server.start();
 
-        request(`http://localhost:${3000}`)
+        request(`http://localhost:${port}`)
         .post('/api/users')
         .send({
             username: 'unit-test',
@@ -38,7 +39,7 @@ describe('Server unit tests', () => {
 
     describe('GET /api/users', () => {
     it('should return a list of users', done => {
-        request(`http://localhost:${3000}`)
+        request(`http://localhost:${port}`)
         .get('/api/users')
         .end((err, res) => {
             expect(err).to.be.null;
@@ -52,7 +53,7 @@ describe('Server unit tests', () => {
     describe('GET /api/users/{id}', () => {
     it('should return a user if the id is valid', done => {
         const id = userId;
-        request(`http://localhost:${3000}`)
+        request(`http://localhost:${port}`)
         .get(`/api/users/${id}`)
         .end((err, res) => {
             expect(err).to.be.null;
@@ -61,16 +62,35 @@ describe('Server unit tests', () => {
             done();
         });
     });
+
+    it('should return 400 if the id is invalid', done => {
+        request(`http://localhost:${port}`)
+          .get('/api/users/wrond-id')
+          .end((err, res) => {
+            expect(res).to.have.status(400);
+            done();
+          });
+      });
+  
+      it('should return 404 if the user does not exist', done => {
+        const uuidNeverExisted = uuidv4();
+        request(`http://localhost:${port}`)
+          .get(`/api/users/${uuidNeverExisted}`)
+          .end((err, res) => {
+            expect(res).to.have.status(404);
+            done();
+          });
+      });
     });
 
     describe('POST /api/users', () => {
     it('should create a new user', done => {
-        request(`http://localhost:${3000}`)
+        request(`http://localhost:${port}`)
         .post('/api/users')
         .send({
-            username: 'test',
-            age: 20,
-            hobbies: ['coding', 'music'],
+            username: 'Mogi',
+            age: 45,
+            hobbies: ['screaming', 'para!'],
         })
         .end((err, res) => {
             expect(err).to.be.null;
@@ -79,32 +99,101 @@ describe('Server unit tests', () => {
             done();
         });
     });
+    it('should return 400 if the username is missing', done => {
+        request(`http://localhost:${port}`)
+          .post('/api/users')
+          .send({
+            age: 20,
+            hobbies: ['testing'],
+          })
+          .end((err, res) => {
+            expect(res).to.have.status(400);
+            done();
+          });
+      });
+      it('should return 400 if the age is missing', done => {
+        request(`http://localhost:${port}`)
+          .post('/api/users')
+          .send({
+            username: 'Britne',
+            hobbies: ['testing'],
+          })
+          .end((err, res) => {
+            expect(res).to.have.status(400);
+            done();
+          });
+      });
+      it('should return 400 if the hobbies are missing', done => {
+        request(`http://localhost:${port}`)
+          .post('/api/users')
+          .send({
+            username: 'Britne',
+            age: 22,
+          })
+          .end((err, res) => {
+            expect(res).to.have.status(400);
+            done();
+          });
+      });
     });
 
     describe('PUT /api/users/{id}', () => {
+    const updatedUsername = 'Tadeusz';
+    const updatedAge = 44;
+    const updatedHobbies = ['fighting for freedom', 'rebelling'];
+
     it('should update a user if the id is valid', done => {
         const id = userId;
-
-        request(`http://localhost:${3000}`)
+        request(`http://localhost:${port}`)
         .put(`/api/users/${id}`)
         .send({
-            username: 'updated',
-            age: 21,
-            hobbies: ['gaming', 'movies'],
+            username: updatedUsername,
+            age: updatedAge,
+            hobbies: updatedHobbies,
         })
         .end((err, res) => {
             expect(err).to.be.null;
             expect(res).to.have.status(200);
-            expect(res.body.username).to.equal('updated');
+            expect(res.body.username).to.equal(updatedUsername);
+            expect(res.body.age).to.equal(updatedAge);
+            expect(res.body.hobbies.toString()).to.equal(updatedHobbies.toString());
             done();
         });
     });
+    it('should return 400 if the id is invalid', done => {
+        request(`http://localhost:${port}`)
+          .put('/api/users/wrond-id')
+          .send({
+            username: updatedUsername,
+            age: updatedAge,
+            hobbies: updatedHobbies,
+          })
+          .end((err, res) => {
+            expect(res).to.have.status(400);
+            done();
+          });
+      });
+  
+      it('should return 404 if the user does not exist', done => {
+        const uuidNeverExisted = uuidv4();
+        request(`http://localhost:${port}`)
+          .put(`/api/users/${uuidNeverExisted}`)
+          .send({
+            username: updatedUsername,
+            age: updatedAge,
+            hobbies: updatedHobbies,
+          })
+          .end((err, res) => {
+            expect(res).to.have.status(404);
+            done();
+          });
+      });
     });
 
     describe('DELETE /api/users/{id}', () => {
     it('should delete a user if the id is valid', done => {
         const id = userId;
-        request(`http://localhost:${3000}`)
+        request(`http://localhost:${port}`)
         .delete(`/api/users/${id}`)
         .end((err, res) => {
             expect(err).to.be.null;
@@ -112,6 +201,36 @@ describe('Server unit tests', () => {
             done();
         });
     });
+    it('should return 400 if the id is invalid', done => {
+        request(`http://localhost:${port}`)
+          .delete('/api/users/wrond-id')
+          .end((err, res) => {
+            expect(res).to.have.status(400);
+            done();
+          });
+      });
+  
+      it('should return 404 if the user does not exist', done => {
+        const uuidNeverExisted = uuidv4();
+        request(`http://localhost:${port}`)
+          .delete(`/api/users/${uuidNeverExisted}`)
+          .end((err, res) => {
+            expect(res).to.have.status(404);
+            done();
+          });
+      });
     });
 
+    describe('GET /some-non/existing/resource', () => {
+        it('should return 404 if the route does not exist', done => {
+          request(`http://localhost:${port}`)
+            .get('/some-non/existing/resource')
+            .end((err, res) => {
+              expect(err).to.be.null;
+              expect(res).to.have.status(404);
+              expect(res.body).to.deep.equal({ message: `Hey, this page wasn't found. Please try again.` });
+              done();
+            });
+        });
+      });
 });

@@ -4,17 +4,6 @@ import { validate as uuidValidate } from 'uuid';
 import * as url from 'url';
 import { User } from './interface/user.interface';
 
-
-// const initialUser: User = {
-//   id: uuidv4(),
-//   username: 'initialUSer',
-//   age: 18,
-//   hobbies: ['guitar', 'phishing', 'gaming'],
-// };
-
-// const users: Record<string, User> = {};
-// users[initialUser.id] = initialUser;
-
 export class Server {
   private server;
   private port: number;
@@ -29,9 +18,9 @@ export class Server {
   private init() {
     const initialUser: User = {
       id: uuidv4(),
-      username: 'initialUSer',
-      age: 18,
-      hobbies: ['guitar', 'phishing', 'gaming'],
+      username: 'Kastus',
+      age: 20,
+      hobbies: ['braid turning'],
     };
     this.users[initialUser.id] = initialUser;
   }
@@ -66,14 +55,18 @@ export class Server {
           });
           req.on('end', () => {
             const { username, age, hobbies } = JSON.parse(body);
-            
-            // Validate request body here
-            
+            if(!username || !age || !hobbies) {
+              const missingFields = [];
+              !username ? missingFields.push('username') : username;
+              !age ? missingFields.push('age') : age;
+              !hobbies ? missingFields.push('hobbies') : hobbies;
+              res.writeHead(400, { 'Content-Type': 'application/json' });
+              res.end(JSON.stringify({ message: `Request body is missing required fields: ${missingFields}` }));
+              return;
+          }        
             const id = uuidv4();
             const newUser: User = { id, username, age, hobbies };
-            
             this.users[id] = newUser;
-            
             res.writeHead(201, { 'Content-Type': 'application/json' });
             res.end(JSON.stringify(newUser));
           });
@@ -99,8 +92,6 @@ export class Server {
   
           req.on('end', () => {
             const updatedData = JSON.parse(putBody);
-            // Validate the updatedData before applying to existing user
-  
             this.users[userId] = { ...this.users[userId], ...updatedData };
             res.writeHead(200, { 'Content-Type': 'application/json' });
             res.end(JSON.stringify(this.users[userId]));
@@ -127,7 +118,7 @@ export class Server {
       }
     } else {
       res.writeHead(404, { 'Content-Type': 'application/json' });
-      res.end(JSON.stringify({ message: 'Not Found' }));
+      res.end(JSON.stringify({ message: `Hey, this page wasn't found. Please try again.` }));
     }
   }
 
