@@ -23,6 +23,8 @@
     "start": "node src/file_manager/index",
     "start:prod": "tsc && node dist/launcher.js",
     "start:dev": "nodemon --watch 'src/**/*.ts' --exec ts-node src/server/launcher.ts",
+    "start:multi:prod": "tsc && node dist/launcher-multi.js",
+    "start:multi:dev": "nodemon --watch 'src/**/*.ts' --exec ts-node src/server/launcher-multi.ts",
     "test": "mocha -r ts-node/register 'src/server/test/**/*.test.ts'"
   },
   "repository": {
@@ -41,6 +43,7 @@
   },
   "homepage": "https://github.com/AlreadyBored/node-nodejs-basics#readme",
   "dependencies": {
+    "dotenv": "^16.3.1",
     "nodemon": "^2.0.22",
     "ts-node": "^10.9.1",
     "uuid": "^9.0.0"

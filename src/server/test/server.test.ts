@@ -3,10 +3,12 @@ import chaiHttp from 'chai-http';
 import { v4 as uuidv4 } from 'uuid';
 import { Server } from './../server';
 import { CONSTANTS } from './../data/constants';
+import dotenv from 'dotenv';
 
+dotenv.config();
 chai.use(chaiHttp);
 const { expect, request } = chai;
-const port = 3001;
+const port = Number(process.env.TESTING_PORT) || 3001;
 
 
 describe('Server unit tests', () => {
