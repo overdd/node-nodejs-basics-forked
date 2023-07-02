@@ -63,7 +63,7 @@ describe('Server unit tests', () => {
         });
     });
 
-    it('should return 400 if the id is invalid', done => {
+    it('should return 400 code if the id is invalid', done => {
         request(`http://localhost:${port}`)
           .get('/api/users/wrond-id')
           .end((err, res) => {
@@ -73,7 +73,7 @@ describe('Server unit tests', () => {
           });
       });
   
-      it('should return 404 if the user does not exist', done => {
+      it('should return 404 code if the user does not exist', done => {
         const uuidNeverExisted = uuidv4();
         request(`http://localhost:${port}`)
           .get(`/api/users/${uuidNeverExisted}`)
@@ -101,7 +101,7 @@ describe('Server unit tests', () => {
             done();
         });
     });
-    it('should return 400 if the username is missing', done => {
+    it('should return 400 code if the username is missing', done => {
         request(`http://localhost:${port}`)
           .post('/api/users')
           .send({
@@ -114,7 +114,7 @@ describe('Server unit tests', () => {
             done();
           });
       });
-      it('should return 400 if the age is missing', done => {
+      it('should return 400 code if the age is missing', done => {
         request(`http://localhost:${port}`)
           .post('/api/users')
           .send({
@@ -127,7 +127,7 @@ describe('Server unit tests', () => {
             done();
           });
       });
-      it('should return 400 if the hobbies are missing', done => {
+      it('should return 400 code if the hobbies are missing', done => {
         request(`http://localhost:${port}`)
           .post('/api/users')
           .send({
@@ -140,7 +140,7 @@ describe('Server unit tests', () => {
             done();
           });
       });
-      it('should return 400 if all field are missing', done => {
+      it('should return 400 code if all field are missing', done => {
         request(`http://localhost:${port}`)
           .post('/api/users')
           .send({
@@ -170,13 +170,14 @@ describe('Server unit tests', () => {
         .end((err, res) => {
             expect(err).to.be.null;
             expect(res).to.have.status(200);
+            expect(res.body.id).to.equal(userId);
             expect(res.body.username).to.equal(updatedUsername);
             expect(res.body.age).to.equal(updatedAge);
             expect(res.body.hobbies.toString()).to.equal(updatedHobbies.toString());
             done();
         });
     });
-    it('should return 400 if the id is invalid', done => {
+    it('should return 400 code if the id is invalid', done => {
         request(`http://localhost:${port}`)
           .put('/api/users/wrond-id')
           .send({
@@ -191,7 +192,7 @@ describe('Server unit tests', () => {
           });
       });
   
-      it('should return 404 if the user does not exist', done => {
+      it('should return 404 code if the user does not exist', done => {
         const uuidNeverExisted = uuidv4();
         request(`http://localhost:${port}`)
           .put(`/api/users/${uuidNeverExisted}`)
@@ -219,7 +220,7 @@ describe('Server unit tests', () => {
             done();
         });
     });
-    it('should return 400 if the id is invalid', done => {
+    it('should return 400 code if the id is invalid', done => {
         request(`http://localhost:${port}`)
           .delete('/api/users/wrond-id')
           .end((err, res) => {
@@ -229,7 +230,7 @@ describe('Server unit tests', () => {
           });
       });
   
-      it('should return 404 if the user does not exist', done => {
+      it('should return 404 code if the user does not exist', done => {
         const uuidNeverExisted = uuidv4();
         request(`http://localhost:${port}`)
           .delete(`/api/users/${uuidNeverExisted}`)
@@ -239,6 +240,17 @@ describe('Server unit tests', () => {
             done();
           });
       });
+
+      it('should return 404 code when trying to GET deleted user', done => {
+        const id = userId;
+        request(`http://localhost:${port}`)
+        .get(`/api/users/${id}`)
+        .end((err, res) => {
+            expect(res).to.have.status(404);
+            expect(res.body.message).to.equal(CONSTANTS.messages.userNotFound);
+            done();
+        });
+    });
     });
 
     describe('GET /some-non/existing/resource', () => {
